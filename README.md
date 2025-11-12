@@ -1,2 +1,2 @@
 # MidnightGamersAstonbot
-A bot for the midnight gamers aston society 
+A discord bot for the midnight gamers aston society 
