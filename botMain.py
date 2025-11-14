@@ -31,7 +31,6 @@ class botClient(commands.Bot):
 
 client = botClient()
 
-
 #sync slash commands with discord
 async def sync():
     print("Starting sync")
@@ -46,10 +45,7 @@ async def sync():
 @client.event
 async def on_ready():
     print("logged in as:",client.user.name)
-
-    
-
-    
+ 
 @client.event
 async def on_message(message):
     if message.author != client.user:
@@ -58,20 +54,10 @@ async def on_message(message):
         #icreases currency by 1 for message author
         client.dbHan.increaseCurrency(message.author.id,1)
 
-
-
-
-
-
-
-
 #start bot
 async def main():
     async with client:
         await client.start(TOKEN)
-
-
-
 
 #start main
 asyncio.run(main())

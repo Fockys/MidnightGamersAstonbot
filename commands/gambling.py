@@ -3,7 +3,6 @@ from discord import app_commands
 from discord.ext import commands
 import random
 
-
 #gambling cog
 class gamblingCog(commands.Cog):
     def __init__(self,client):
@@ -48,7 +47,6 @@ class gamblingCog(commands.Cog):
             value=self.client.currencySymbol+bal,
             inline=False)
         await interaction.response.send_message(embed=embed)
-
 
 async def setup(client):
     await client.add_cog(gamblingCog(client))

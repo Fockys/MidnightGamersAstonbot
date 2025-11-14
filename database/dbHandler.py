@@ -1,6 +1,5 @@
 import sqlite3
 
-
 #handles the db with serveral functions to interact with it
 class handler():
     def __init__(self,dbDir):
@@ -32,16 +31,13 @@ class handler():
             self.newUser(id)
             self.c.execute("SELECT * FROM users WHERE USERID=%i"%(id))
             result = self.c.fetchall()
-
         return result
 
     #-1 returns means user doesnt exist
     def getXP(self,id):
-    
         return(self.getUser(id)[0][2])
     
     def getCurrency(self,id):
-    
         return(self.getUser(id)[0][1])
 
     def increaseXP(self,id,increase):
@@ -60,10 +56,8 @@ class handler():
         self.c.execute("UPDATE users SET CURRENCY=%i WHERE USERID = %i"%(user[0][1]+increase,id))
         self.commit()
 
-
     def commit(self):
         self.con.commit()
-
 
 if __name__ == "__main__":
     dbHan = handler("db.db")
