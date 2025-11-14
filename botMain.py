@@ -1,25 +1,80 @@
-
 import discord
+from discord.ext import commands
+import database.dbHandler as db
+import asyncio
 import os
-import sys
 
-class botMainClient(discord.Client):
-    async def on_ready(self):
-        print(f'Logged on as {self.user}')
-    async def on_message(self,message):
-        print(message.author)
-        if message.author == self:
-            pass
-        if message.author.id == 690669470171136020:
-            await message.add_reaction("🫄")
+#bot token
+TOKEN = None
 
-        print(f'Message from {message.author}: {message.content}')
+#The bot class itself
+class botClient(commands.Bot):
+    _watcher: asyncio.Task
+
+    def __init__(self):
+        #gets the database handler
+        self.dbHan = db.handler("db.db")
+        #the symbol to be used with currency
+        self.currencySymbol = "🪙"
+
+        super().__init__(
+            command_prefix="!",
+            intents=discord.Intents.all()
+        )
+
+    #on setup get all the different extensions found under commands and load them
+    async def setup_hook(self):
+        for filename in os.listdir("./commands"):
+            if filename.endswith("py"):
+                await client.load_extension(f"commands.{filename[:-3]}")
+        await sync()
+
+client = botClient()
 
 
-intents = discord.Intents.default()
-intents.message_content = True
+#sync slash commands with discord
+async def sync():
+    print("Starting sync")
+    try:
+        guild = discord.Object(id=1383922325065564210)
+        synced = await client.tree.sync()
+        print(f"Synced {len(synced)} command(s).")
+    except:
+        print("Sync failed")
 
-client = botMainClient(intents=intents)
+#when client is ready print message
+@client.event
+async def on_ready():
+    print("logged in as:",client.user.name)
 
-client.run()
+    
+
+    
+@client.event
+async def on_message(message):
+    if message.author != client.user:
+        #prints chat to command line
+        print(message.author.name + ":" +message.content)
+        #icreases currency by 1 for message author
+        client.dbHan.increaseCurrency(message.author.id,1)
+
+
+
+
+
+
+
+
+#start bot
+async def main():
+    async with client:
+        await client.start(TOKEN)
+
+
+
+
+#start main
+asyncio.run(main())
+
+
 
