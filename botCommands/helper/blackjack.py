@@ -61,7 +61,7 @@ class blackjackGame():
         for card in hand:
             sum += self.values[card.value]
             if self.values[card.value] == "Ace":
-                aces += 1
+                aces += 11
         if sum > 21 and aces>0:
             sum-=10
 
@@ -97,8 +97,20 @@ class blackjackGame():
     
     def niceUserDeck(self):
         return(self.returnDeckWithEmoji(self.userHand))
-    def niceBotDeck(self):
-        return(self.returnDeckWithEmoji(self.botHand))
+    def niceBotDeck(self,end):
+        
+        #if end isnt true obfursates first card
+        hand = self.returnDeckWithEmoji(self.botHand)
+        if end == False:
+            try:
+                temp = hand.split('|')
+                del(temp[0])
+                hand = '|'.join(temp)
+                hand = "? |"+hand
+            except Exception as e:
+                print(e)
+
+        return(hand)
     
     def hitUser(self):
         self.userHand.append(self.deck.pop())

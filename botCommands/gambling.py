@@ -66,10 +66,11 @@ class gamblingCog(commands.Cog):
             try:
                 self.outter.blackjackGames[interaction.user.id].hitUser()
                 gameEmbed = discord.Embed(title="Blackjack")
-                gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(),inline=False)
+                gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(False),inline=False)
                 gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
                 if self.outter.blackjackGames[interaction.user.id].isBustUser():
                     betAmount = self.outter.blackjackGames[interaction.user.id].bet
+                    gameEmbed.set_field_at(1,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                     self.outter.blackJackEnd(interaction.user.id)
                     self.outter.client.dbHan.increaseCurrency(interaction.user.id,-self.outter.blackjackGames[interaction.user.id].bet)
@@ -83,22 +84,25 @@ class gamblingCog(commands.Cog):
         #creates the button for stand and its behaviour
         @discord.ui.button(label="Stand",style=discord.ButtonStyle.gray)
         async def standPressed(self,interaction:discord.Interaction,button:discord.Button):
-            result = self.outter.blackjackGames[interaction.user.id].userStay()
-            gameEmbed = discord.Embed(title="Blackjack")
-            gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(),inline=False)
-            gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
-            if result == 0:
-                gameEmbed.add_field(name="Game Over",value="Tie")
-            elif result == 1:
-                betAmount = self.outter.blackjackGames[interaction.user.id].bet
-                gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
-                self.outter.client.dbHan.increaseCurrency(interaction.user.id,-betAmount)
-            elif result  == 2:
-                betAmount = self.outter.blackjackGames[interaction.user.id].bet
-                gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
-                self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount)
-            self.outter.blackJackEnd(interaction.user.id)
-            await interaction.response.edit_message(embed=gameEmbed,view=None)
+            try:
+                result = self.outter.blackjackGames[interaction.user.id].userStay()
+                gameEmbed = discord.Embed(title="Blackjack")
+                gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
+                gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
+                if result == 0:
+                    gameEmbed.add_field(name="Game Over",value="Tie")
+                elif result == 1:
+                    betAmount = self.outter.blackjackGames[interaction.user.id].bet
+                    gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
+                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,-betAmount)
+                elif result  == 2:
+                    betAmount = self.outter.blackjackGames[interaction.user.id].bet
+                    gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
+                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount)
+                self.outter.blackJackEnd(interaction.user.id)
+                await interaction.response.edit_message(embed=gameEmbed,view=None)
+            except Exception as e:
+                print(e)
 
 
 
@@ -130,7 +134,7 @@ class gamblingCog(commands.Cog):
         self.blackjackGames[interaction.user.id] = blackjackGame(int(amount))
         gameEmbed = discord.Embed(title="Blackjack")
         
-        gameEmbed.add_field(name="Dealer Hand",value=self.blackjackGames[interaction.user.id].niceBotDeck(),inline=False)
+        gameEmbed.add_field(name="Dealer Hand",value=self.blackjackGames[interaction.user.id].niceBotDeck(False),inline=False)
         gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
 
 
