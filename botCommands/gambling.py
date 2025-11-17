@@ -124,7 +124,7 @@ class gamblingCog(commands.Cog):
         if user[1] < int(amount):
             await interaction.response.send_message("lacking funds")
             return 0
-        self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
+        self.client.dbHan.increaseCurrency(interaction.user.id,-(int(amount)))
         #checks if the user is in a game or not already, 1 game per user playing
         if interaction.user.id in self.blackjackGames:
             failEmbed = discord.Embed(title="Blackjack error",description="You are already in a game")
