@@ -89,12 +89,13 @@ class gamblingCog(commands.Cog):
                 gameEmbed = discord.Embed(title="Blackjack")
                 gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                 gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
+                betAmount = self.outter.blackjackGames[interaction.user.id].bet
                 if result == 0:
                     gameEmbed.add_field(name="Game Over",value="Tie")
                 elif result == 1:
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                 elif result  == 2:
-                    betAmount = self.outter.blackjackGames[interaction.user.id].bet
+                    
                     gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
                     self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2)
                 self.outter.blackJackEnd(interaction.user.id)
