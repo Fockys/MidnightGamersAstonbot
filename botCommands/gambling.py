@@ -70,7 +70,7 @@ class gamblingCog(commands.Cog):
                 gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
                 if self.outter.blackjackGames[interaction.user.id].isBustUser():
                     betAmount = self.outter.blackjackGames[interaction.user.id].bet
-                    gameEmbed.set_field_at(1,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
+                    gameEmbed.set_field_at(0,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                     self.outter.blackJackEnd(interaction.user.id)
                     
@@ -98,6 +98,7 @@ class gamblingCog(commands.Cog):
                     gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
                     self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2)
                 self.outter.blackJackEnd(interaction.user.id)
+                gameEmbed.set_field_at(0,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                 await interaction.response.edit_message(embed=gameEmbed,view=None)
             except Exception as e:
                 print(e)
