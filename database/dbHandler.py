@@ -27,6 +27,11 @@ class handler():
                   )
                   """)
 
+    def getTop10(self):
+        self.c.execute("SELECT * FROM users ORDER BY currency DESC LIMIT 10")
+        result = self.c.fetchall()
+        return result
+
     def close(self):
         self.con.close()
 
