@@ -73,7 +73,7 @@ class gamblingCog(commands.Cog):
                     gameEmbed.set_field_at(1,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                     self.outter.blackJackEnd(interaction.user.id)
-                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,-self.outter.blackjackGames[interaction.user.id].bet)
+                    
                     await interaction.response.edit_message(embed=gameEmbed,view=None)
                 else:
                     await interaction.response.edit_message(embed=gameEmbed)
@@ -94,11 +94,10 @@ class gamblingCog(commands.Cog):
                 elif result == 1:
                     betAmount = self.outter.blackjackGames[interaction.user.id].bet
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
-                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,-betAmount)
                 elif result  == 2:
                     betAmount = self.outter.blackjackGames[interaction.user.id].bet
                     gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
-                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount)
+                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2)
                 self.outter.blackJackEnd(interaction.user.id)
                 await interaction.response.edit_message(embed=gameEmbed,view=None)
             except Exception as e:
@@ -125,6 +124,7 @@ class gamblingCog(commands.Cog):
         if user[1] < int(amount):
             await interaction.response.send_message("lacking funds")
             return 0
+        self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
         #checks if the user is in a game or not already, 1 game per user playing
         if interaction.user.id in self.blackjackGames:
             failEmbed = discord.Embed(title="Blackjack error",description="You are already in a game")
