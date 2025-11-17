@@ -3,12 +3,14 @@ from discord.ext import commands
 import database.dbHandler as db
 import asyncio
 import os
+import time
 
 #bot token
 try:
     TOKEN= os.environ['TOKEN']
 except:
     print("Environment token not found")
+    
    
 
 #The bot class itself
@@ -55,8 +57,14 @@ async def on_message(message):
     if message.author != client.user:
         #prints chat to command line
         print(message.author.name + ":" +message.content)
-        #icreases currency by 1 for message author
-        client.dbHan.increaseCurrency(message.author.id,1)
+        user = client.dbHan.getUser(message.author.id)
+        user=user[0]
+
+        #checks if user is eligbile for next coin
+        if user[3] == None or (time.time()>user[3]+60):
+            #increases currency by 1 for message author
+            client.dbHan.increaseCurrency(message.author.id,1)
+            client.dbHan.writeLastCoinNow(message.author.id)
 
 #start bot
 async def main():

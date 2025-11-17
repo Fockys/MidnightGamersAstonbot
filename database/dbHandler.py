@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import time
 #handles the db with serveral functions to interact with it
 class handler():
     def __init__(self):
@@ -67,14 +68,19 @@ class handler():
         self.c.execute("UPDATE users SET CURRENCY=%i WHERE USERID = %i"%(user[0][1]+increase,id))
         self.commit()
 
+    def writeLastCoinNow(self,id):
+        user = self.getUser(id)
+        if user == -1:
+            self.newUser(id)
+            user = self.getUser(id)
+        currentTime = time.time()
+        self.c.execute("UPDATE users SET Lastcoin =%i WHERE USERID = %i"%(currentTime,id))
+
     def commit(self):
         self.con.commit()
 
+
 if __name__ == "__main__":
     dbHan = handler()
-    try:
-        dbHan.increaseCurrency(459034429956947968,500)
-    except Exception as e:
-        print(e)
 
 

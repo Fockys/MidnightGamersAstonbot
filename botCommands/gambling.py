@@ -106,6 +106,8 @@ class gamblingCog(commands.Cog):
     def blackJackEnd(self,id):
         del[self.blackjackGames[id]]
 
+
+
     #blackjack
     @app_commands.command(name="blackjack",description="starts blackjack game")
     @app_commands.describe(amount="Amount to bet")
