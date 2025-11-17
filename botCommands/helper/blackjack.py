@@ -64,7 +64,7 @@ class blackjackGame():
                 aces += 1
                 sum+= 10
         if sum > 21 and aces>0:
-            sum-=10
+            sum-=10 *aces
 
         
         return(sum)
