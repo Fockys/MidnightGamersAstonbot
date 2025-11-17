@@ -60,9 +60,9 @@ class blackjackGame():
         aces =0
         for card in hand:
             sum += self.values[card.value]
-            if self.values[card.value] == "Ace":
+            if card.value == "Ace":
                 aces += 1
-                sum+= 11
+                sum+= 10
         if sum > 21 and aces>0:
             sum-=10
 

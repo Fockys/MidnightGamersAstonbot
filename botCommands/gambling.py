@@ -92,7 +92,6 @@ class gamblingCog(commands.Cog):
                 if result == 0:
                     gameEmbed.add_field(name="Game Over",value="Tie")
                 elif result == 1:
-                    betAmount = self.outter.blackjackGames[interaction.user.id].bet
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                 elif result  == 2:
                     betAmount = self.outter.blackjackGames[interaction.user.id].bet
