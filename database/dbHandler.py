@@ -83,6 +83,14 @@ class handler():
     def commit(self):
         self.con.commit()
 
+    def writeLastSteal(self,id):
+        user = self.getUser(id)
+        if user == -1:
+            self.newUser(id)
+            user = self.getUser(id)
+        currentTime = time.time()
+        self.c.execute("UPDATE users SET Laststeal =%i WHERE USERID = %i"%(currentTime,id))
+
 
     def getJackpot(self):
         self.c.execute("SELECT * FROM slots")
@@ -97,6 +105,7 @@ class handler():
 
 if __name__ == "__main__":
     dbHan = handler()
+
 
 
 
