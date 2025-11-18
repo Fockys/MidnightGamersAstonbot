@@ -223,7 +223,7 @@ class gamblingCog(commands.Cog):
                 gameEmbed.add_field(name="you won",value=str(prize))
             jackpot = self.client.dbHan.getJackpot()
             gameEmbed.add_field(name="current jackpot",value=jackpot)
-
+            self.client.dbHan.increaseCurrency(interaction.user.id,prize)
             await interaction.response.send_message(embed=gameEmbed)
         except Exception as e:
             print("problem in response")
