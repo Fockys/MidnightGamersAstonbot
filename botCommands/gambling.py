@@ -164,7 +164,7 @@ class gamblingCog(commands.Cog):
             await interaction.response.send_message("lacking funds")
             return 0
         
-        symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown"]
+        symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown","stawberry","blueberry","apple","banana","watermelon","pineapple","kiwi"]
         symbolEmoji = {
             "melon":"🍈",
             "pear":"🍐",
@@ -173,14 +173,22 @@ class gamblingCog(commands.Cog):
             "lemon":"🍋",
             "cherries":"🍒",
             "grapes":"🍇",
-            "crown":"👑"
+            "crown":"👑",
+            "strawberry":"🍓",
+            "blueberry":"🫐",
+            "apple":"🍏",
+            "banana":"🍌",
+            "watermelon":"🍉",
+            "pineapple":"🍍",
+            "kiwi":"🥝"
         }
         amount = int(amount)
         
+        numSymbols = len(symbols)
         self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
-        symbol1 = symbols[random.randint(0,7)]
-        symbol2 = symbols[random.randint(0,7)]
-        symbol3 = symbols[random.randint(0,7)]
+        symbol1 = symbols[random.randint(0,numSymbols-1)]
+        symbol2 = symbols[random.randint(0,numSymbols-1)]
+        symbol3 = symbols[random.randint(0,numSymbols-1)]
         try:
             count = {}
             count[symbol1] = 1
