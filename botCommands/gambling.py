@@ -212,11 +212,11 @@ class gamblingCog(commands.Cog):
                     prize = jackpot
                     self.client.dbHan.setJackpot(0)
                 else:
-                    prize = amount*10
+                    prize = amount*5
             elif len(count) == 2:
-                prize = amount*3
-            elif 'crown' in count:
                 prize = amount*2
+            elif 'crown' in count:
+                prize = amount
             else:
                 prize = 0
                 jackpot = self.client.dbHan.getJackpot()
