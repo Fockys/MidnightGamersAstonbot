@@ -156,8 +156,8 @@ class gamblingCog(commands.Cog):
             return 0
         if int(amount) > 1000:
             await interaction.response.send_message("Max bet is set at 1000")
-        if int(amount)<1:
-            await interaction.response.send_message("Min bet set at 1")
+        if int(amount)<10:
+            await interaction.response.send_message("Min bet set at 10")
         user = self.client.dbHan.getUser(interaction.user.id)
         user=user[0]
         if user[1] < int(amount):
