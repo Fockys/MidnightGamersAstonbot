@@ -54,8 +54,8 @@ class economyCog(commands.Cog):
             if userDB[4]==None or currentTime>userDB[4]+900:
                 success = random.random()
                 if success > 0.8:
-                    lost = math.ceil(userDB[1]*0.9)
-                    await interaction.response.send_message("You got caught and lost " +self.client.currencySymbol+str(lost))
+                    lost = math.ceil(userDB[1])
+                    await interaction.response.send_message("You got caught and lost it all")
                     self.client.dbHan.increaseCurrency(interaction.user.id,-lost)
                 else:
                     if interaction.user.id == 609056469689565235:
@@ -63,7 +63,7 @@ class economyCog(commands.Cog):
                     else:
                         stealAmount = math.ceil(targetDB[1]*0.01)
 
-                    await interaction.response.send_message("You succesffuly stole "+self.client.currencySymbol + str(stealAmount))
+                    await interaction.response.send_message("You succesffuly stole "+self.client.currencySymbol + str(stealAmount) + " from "+target.name)
                     self.client.dbHan.increaseCurrency(interaction.user.id,stealAmount)
                     self.client.dbHan.increaseCurrency(target.id,-stealAmount)
                 self.client.dbHan.writeLastSteal(interaction.user.id)
