@@ -154,8 +154,8 @@ class gamblingCog(commands.Cog):
         if amount.isdigit() == False:
             await interaction.response.send_message("invalid amount")
             return 0
-        if int(amount) > 100:
-            await interaction.response.send_message("Max bet is set at 100")
+        if int(amount) > 1000:
+            await interaction.response.send_message("Max bet is set at 1000")
         if int(amount)<1:
             await interaction.response.send_message("Min bet set at 1")
         user = self.client.dbHan.getUser(interaction.user.id)
@@ -212,9 +212,9 @@ class gamblingCog(commands.Cog):
                     prize = jackpot
                     self.client.dbHan.setJackpot(0)
                 else:
-                    prize = amount*20
+                    prize = amount*10
             elif len(count) == 2:
-                prize = amount*5
+                prize = amount*3
             elif 'crown' in count:
                 prize = amount*2
             else:
