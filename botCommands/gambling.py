@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 import random
+import math
 from botCommands.helper.blackjack import blackjackGame
 
 
@@ -145,6 +146,96 @@ class gamblingCog(commands.Cog):
         await interaction.response.send_message(embed=gameEmbed,view = self.blackjackButtons(self))
 
 
+    #slots fruits
+    @app_commands.command(name="slots",description="starts slots game")
+    @app_commands.describe(amount="Amount to bet")
+    async def slots(self,interaction:discord.Interaction,amount:str):
+        #ensures bet amount is valid
+        if amount.isdigit() == False:
+            await interaction.response.send_message("invalid amount")
+            return 0
+        if int(amount) > 100:
+            await interaction.response.send_message("Max bet is set at 100")
+        if int(amount)<1:
+            await interaction.response.send_message("Min bet set at 1")
+        user = self.client.dbHan.getUser(interaction.user.id)
+        user=user[0]
+        if user[1] < int(amount):
+            await interaction.response.send_message("lacking funds")
+            return 0
+        
+        symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown"]
+        symbolEmoji = {
+            "melon":"🍈",
+            "pear":"🍐",
+            "peach":"🍑",
+            "orange":"🍊",
+            "lemon":"🍋",
+            "cherries":"🍒",
+            "grapes":"🍇",
+            "crown":"👑"
+        }
+        amount = int(amount)
+        
+        self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
+        symbol1 = symbols[random.randint(0,7)]
+        symbol2 = symbols[random.randint(0,7)]
+        symbol3 = symbols[random.randint(0,7)]
+        try:
+            count = {}
+            count[symbol1] = 1
+            if symbol2 == symbol1:
+                count[symbol1] = 2
+            else:
+                count[symbol2] = 1
+            if symbol3 in count:
+                count[symbol3] = count.get(symbol3)+1
+            else:
+                count[symbol3] = 1
+        except Exception as e:
+            print("problem in counts")
+            print(e)
+
+        try:
+            
+            if len(count) == 1:
+                if 'crown' in count:
+                    jackpot = self.client.dbHan.getJackpot()
+                    prize = jackpot
+                    self.client.dbHan.setJackpot(0)
+                else:
+                    prize = amount*20
+            elif len(count) == 2:
+                prize = amount*5
+            elif 'crown' in count:
+                prize = amount*2
+            else:
+                prize = 0
+                jackpot = self.client.dbHan.getJackpot()
+                self.client.dbHan.setJackpot(math.ceil(amount*0.9)+jackpot)
+        except  Exception as e:
+            print("problem in finding payout")
+        try:
+            gameEmbed = discord.Embed(title = "slots",description=symbolEmoji[symbol1]+symbolEmoji[symbol2]+symbolEmoji[symbol3])
+            if prize == 0:
+                gameEmbed.add_field(name="You lost",value=str(amount))
+            else:
+                gameEmbed.add_field(name="you won",value=str(prize))
+            jackpot = self.client.dbHan.getJackpot()
+            gameEmbed.add_field(name="current jackpot",value=jackpot)
+
+            await interaction.response.send_message(embed=gameEmbed)
+        except Exception as e:
+            print("problem in response")
+            print(e)
+        
+
+
+
+        return
+
+
+        
     
     
 

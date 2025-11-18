@@ -20,10 +20,9 @@ class handler():
 
     def createTable(self):
         self.c.execute("""
-                CREATE TABLE IF NOT EXISTS users (
+                CREATE TABLE IF NOT EXISTS slots (
                   USERID BIGINT PRIMARY KEY NOT NULL,
-                  CURRENCY INTEGER NOT NULL,
-                  XP INTEGER NOT NULL
+                  JACKPOT INTEGER NOT NULL
                   )
                   """)
 
@@ -85,7 +84,19 @@ class handler():
         self.con.commit()
 
 
+    def getJackpot(self):
+        self.c.execute("SELECT * FROM slots")
+        result = self.c.fetchone()[1]
+        return(result)
+
+    def setJackpot(self,jackpot):
+        try:
+            self.c.execute("UPDATE slots SET JACKPOT=%i WHERE USERID = 0"%(jackpot))
+        except:
+            print("failed to set jackpot")
+
 if __name__ == "__main__":
     dbHan = handler()
+
 
 
