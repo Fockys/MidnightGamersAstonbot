@@ -103,6 +103,7 @@ class handler():
         except:
             print("failed to set jackpot")
 
+
 if __name__ == "__main__":
     dbHan = handler()
 

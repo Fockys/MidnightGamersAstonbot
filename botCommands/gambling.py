@@ -3,7 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 import random
 import math
-from botCommands.helper.blackjack import blackjackGame
+from botCommands.gamblingHelper.blackjack import blackjackGame
+from botCommands.gamblingHelper.slots import slotsGame
 
 
 
@@ -157,8 +158,8 @@ class gamblingCog(commands.Cog):
         if int(amount) > 1000:
             await interaction.response.send_message("Max bet is set at 1000")
             return 0
-        if int(amount)<10:
-            await interaction.response.send_message("Min bet set at 10")
+        if int(amount)<1:
+            await interaction.response.send_message("Min bet set at 1")
             return 0
         user = self.client.dbHan.getUser(interaction.user.id)
         user=user[0]
@@ -166,82 +167,34 @@ class gamblingCog(commands.Cog):
             await interaction.response.send_message("lacking funds")
             return 0
         
-        symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown","stawberry","blueberry","apple","banana","watermelon","pineapple","kiwi"]
-        symbolEmoji = {
-            "melon":"🍈",
-            "pear":"🍐",
-            "peach":"🍑",
-            "orange":"🍊",
-            "lemon":"🍋",
-            "cherries":"🍒",
-            "grapes":"🍇",
-            "crown":"👑",
-            "strawberry":"🍓",
-            "blueberry":"🫐",
-            "apple":"🍏",
-            "banana":"🍌",
-            "watermelon":"🍉",
-            "pineapple":"🍍",
-            "kiwi":"🥝"
-        }
         amount = int(amount)
         
-        numSymbols = len(symbols)
+        #deducts bet amount from user
         self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
-        symbol1 = symbols[random.randint(0,numSymbols-1)]
-        symbol2 = symbols[random.randint(0,numSymbols-1)]
-        symbol3 = symbols[random.randint(0,numSymbols-1)]
-        try:
-            count = {}
-            count[symbol1] = 1
-            if symbol2 == symbol1:
-                count[symbol1] = 2
-            else:
-                count[symbol2] = 1
-            if symbol3 in count:
-                count[symbol3] = count.get(symbol3)+1
-            else:
-                count[symbol3] = 1
-        except Exception as e:
-            print("problem in counts")
-            print(e)
 
+        #starts a slot game
+        result = slotsGame()
+
+        #outputs and sets correct prize
+        jackpot = self.client.dbHan.getJackpot()
+        if result[0] == 100:
+            prize = jackpot
+            pass #jackpot behaviour
+        else:
+            prize = result[0]*amount
         try:
-            
-            if len(count) == 1:
-                if 'crown' in count:
-                    jackpot = self.client.dbHan.getJackpot()
-                    prize = jackpot
-                    self.client.dbHan.setJackpot(0)
-                else:
-                    prize = amount*5
-            elif len(count) == 2:
-                prize = amount*2
-            elif 'crown' in count:
-                prize = amount
-            else:
-                prize = 0
-                jackpot = self.client.dbHan.getJackpot()
-                self.client.dbHan.setJackpot(math.ceil(amount*0.9)+jackpot)
-        except  Exception as e:
-            print("problem in finding payout")
-        try:
-            gameEmbed = discord.Embed(title = "slots",description=symbolEmoji[symbol1]+symbolEmoji[symbol2]+symbolEmoji[symbol3])
+            gameEmbed = discord.Embed(title = "slots",description=result[1])
             if prize == 0:
                 gameEmbed.add_field(name="You lost",value=str(amount))
             else:
-                gameEmbed.add_field(name="you won",value=str(prize))
-            jackpot = self.client.dbHan.getJackpot()
+                gameEmbed.add_field(name="you won",value=prize)
+            
             gameEmbed.add_field(name="current jackpot",value=jackpot)
             self.client.dbHan.increaseCurrency(interaction.user.id,prize)
             await interaction.response.send_message(embed=gameEmbed)
         except Exception as e:
             print("problem in response")
             print(e)
-        
-
-
-
         return
 
 
