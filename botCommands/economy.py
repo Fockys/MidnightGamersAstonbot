@@ -46,6 +46,7 @@ class economyCog(commands.Cog):
 
         if interaction.user.id == target.id:
             await interaction.response.send_message("You cant steal from yourself")
+            return
 
         userDB = self.client.dbHan.getUser(interaction.user.id)[0]
         targetDB = self.client.dbHan.getUser(target.id)[0]
@@ -71,6 +72,31 @@ class economyCog(commands.Cog):
                 await interaction.response.send_message("Command has a 15 minute cooldown per person")
         except Exception as e:
             print(e)
+
+    @app_commands.command(name="give",description="give money to someone")
+    @app_commands.describe(target="person to target",amount="amount of money to give")
+    async def give(self,interaction:discord.Interaction,target=discord.Member,amount=int):
+        if interaction.user.id == target.id:
+            await interaction.response.send_message("You cant give to yourself")
+            return
+        
+        #ensures give amount is valid
+        if amount.isdigit() == False:
+            await interaction.response.send_message("invalid amount")
+            return
+        user = self.client.dbHan.getUser(interaction.user.id)
+        user=user[0]
+        amount = int(amount)
+        if user[1] < amount:
+            await interaction.response.send_message("lacking funds")
+            return
+        
+        #takes money from interaction author and gives to the target
+        self.client.dbHan.increaseCurrency(target.id,amount)
+        self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
+        await interaction.response.send_message("Gave "+str(amount)+self.client.currenySymbol+" to "+target.name)
+
+
 
 async def setup(client):
     await client.add_cog(economyCog(client))
