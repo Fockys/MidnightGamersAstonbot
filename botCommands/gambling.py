@@ -158,8 +158,8 @@ class gamblingCog(commands.Cog):
         if int(amount) > 1000:
             await interaction.response.send_message("Max bet is set at 1000")
             return 0
-        if int(amount)<1:
-            await interaction.response.send_message("Min bet set at 1")
+        if int(amount)<5:
+            await interaction.response.send_message("Min bet set at 5")
             return 0
         user = self.client.dbHan.getUser(interaction.user.id)
         user=user[0]
@@ -186,6 +186,7 @@ class gamblingCog(commands.Cog):
             gameEmbed = discord.Embed(title = "slots",description=result[1])
             if prize == 0:
                 gameEmbed.add_field(name="You lost",value=str(amount))
+                self.client.dbHan.setJackpot(jackpot+math.floor(amount*0.9))
             else:
                 gameEmbed.add_field(name="you won",value=prize)
             
