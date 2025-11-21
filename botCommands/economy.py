@@ -79,22 +79,24 @@ class economyCog(commands.Cog):
         if interaction.user.id == target.id:
             await interaction.response.send_message("You cant give to yourself")
             return
-        
-        #ensures give amount is valid
-        if amount.isdigit() == False:
-            await interaction.response.send_message("invalid amount")
-            return
-        user = self.client.dbHan.getUser(interaction.user.id)
-        user=user[0]
-        amount = int(amount)
-        if user[1] < amount:
-            await interaction.response.send_message("lacking funds")
-            return
-        
-        #takes money from interaction author and gives to the target
-        self.client.dbHan.increaseCurrency(target.id,amount)
-        self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
-        await interaction.response.send_message("Gave "+str(amount)+self.client.currenySymbol+" to "+target.name)
+        try:
+            #ensures give amount is valid
+            if amount.isdigit() == False:
+                await interaction.response.send_message("invalid amount")
+                return
+            user = self.client.dbHan.getUser(interaction.user.id)
+            user=user[0]
+            amount = int(amount)
+            if user[1] < amount:
+                await interaction.response.send_message("lacking funds")
+                return
+            
+            #takes money from interaction author and gives to the target
+            self.client.dbHan.increaseCurrency(target.id,amount)
+            self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
+            await interaction.response.send_message("Gave "+str(amount)+self.client.currencySymbol+" to "+target.name)
+        except Exception as e:
+            print(e)
 
 
 
