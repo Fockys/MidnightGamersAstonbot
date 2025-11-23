@@ -58,7 +58,7 @@ async def on_ready():
 async def on_message(message):
     if message.author.id == 663388334059683848:
         print("is nite")
-        message.add_reaction("🫃")
+        await message.add_reaction("🫃")
     if message.author != client.user:
         #prints chat to command line
         print(message.author.name + ":" +message.content)
