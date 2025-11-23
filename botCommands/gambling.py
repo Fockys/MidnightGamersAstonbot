@@ -186,11 +186,12 @@ class gamblingCog(commands.Cog):
             gameEmbed = discord.Embed(title = "slots",description=result[1])
             if prize == 0:
                 gameEmbed.add_field(name="You lost",value=str(amount))
-                self.client.dbHan.setJackpot(jackpot+math.floor(amount*0.9))
+                amount = math.floor(amount*0.9)
+                self.client.dbHan.setJackpot(jackpot+amount)
             else:
                 gameEmbed.add_field(name="you won",value=prize)
             
-            gameEmbed.add_field(name="current jackpot",value=jackpot)
+            gameEmbed.add_field(name="current jackpot",value=jackpot+amount)
             self.client.dbHan.increaseCurrency(interaction.user.id,prize)
             await interaction.response.send_message(embed=gameEmbed)
         except Exception as e:
