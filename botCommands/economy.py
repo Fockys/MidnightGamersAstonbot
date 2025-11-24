@@ -60,9 +60,9 @@ class economyCog(commands.Cog):
                     self.client.dbHan.increaseCurrency(interaction.user.id,-lost)
                 else:
                     if interaction.user.id == 609056469689565235:
-                        stealAmount = math.ceil(targetDB[1]*0.03)
+                        stealAmount = math.ceil(targetDB[1]*0.003)
                     else:
-                        stealAmount = math.ceil(targetDB[1]*0.01)
+                        stealAmount = math.ceil(targetDB[1]*0.001)
 
                     await interaction.response.send_message("You succesffuly stole "+self.client.currencySymbol + str(stealAmount) + " from "+target.name)
                     self.client.dbHan.increaseCurrency(interaction.user.id,stealAmount)
