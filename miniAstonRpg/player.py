@@ -1,7 +1,7 @@
 import math
 
 class playerClass():
-    def __init__(self,stats,xp,skillPoints):
+    def __init__(self,stats,xp,skillPoints,spell,hp):
         self.discordUser = None
         self.xp = xp
         self.levelConst = 1
@@ -13,6 +13,11 @@ class playerClass():
         self.int = stats[3]
         self.wis = stats[4]
         self.cha = stats[5]
+
+        
+
+        self.spell = spell
+        self.hp = hp
 
 
     def changeStrength(self,amount):

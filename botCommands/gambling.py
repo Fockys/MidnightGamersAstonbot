@@ -117,6 +117,13 @@ class gamblingCog(commands.Cog):
     def blackJackEnd(self,id):
         del[self.blackjackGames[id]]
 
+    @app_commands.command(name="endblackjack",description="force ends blackjack")
+    @app_commands.describe(target="person to target")
+    @app_commands.default_permissions()
+    async def endBlackjack(self,interaction:discord.Interaction,target:discord.Member):
+        self.blackJackEnd(target.id)
+        await interaction.response.send_message("Game stopped for target",ephemeral=True)
+
 
 
     #blackjack

@@ -34,6 +34,7 @@ class botClient(commands.Bot):
         for filename in os.listdir("./botCommands"):
             if filename.endswith("py"):
                 await client.load_extension(f"botCommands.{filename[:-3]}")
+        await client.load_extension(f"miniAstonRpg.rpgCommands")
         await sync()
 
 client = botClient()
@@ -55,8 +56,6 @@ async def on_ready():
  
 @client.event
 async def on_message(message):
-    if message.author.id == 663388334059683848:
-        await message.add_reaction("🫃")
     if message.author != client.user:
         #prints chat to command line
         print(message.author.name + ":" +message.content)

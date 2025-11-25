@@ -29,9 +29,20 @@ class handler():
 
     def createTable(self):
         self.c.execute("""
-                CREATE TABLE IF NOT EXISTS slots (
-                  USERID BIGINT PRIMARY KEY NOT NULL,
-                  JACKPOT INTEGER NOT NULL
+                CREATE TABLE rpgUsers (
+                    USERID BIGINT PRIMARY KEY NOT NULL,
+                    XP INTEGER NOT NULL,
+                    STR INTEGER NOT NULL,
+                    DEX INTEGER NOT NULL,
+                    CON INTEGER NOT NULL,
+                    INT INTEGER NOT NULL,
+                    WIS INTEGER NOT NULL,
+                    CHA INTEGER NOT NULL,
+                    HP INTEGER NOT NULL,
+                    SKILLPOINTS INTEGER NOT NULL,
+                    SPELL INTEGER,
+                    LASTHEAL BIGINT NOT NULL
+
                   )
                   """)
 
@@ -102,11 +113,28 @@ class handler():
         except:
             print("failed to set jackpot")
 
+    def dropRPG(self):
+        self.c.execute("DROP TABLE rpgusers")
+
+
+    #rpg related command stuff
+
+    def newRPGUser(self,id):
+        self.c.execute("INSERT INTO rpgusers (userID,xp,skillpoints,hp,str,dex,con,int,wis,cha,lastHeal) VALUES (%i,0,0,0,0,0,0,0,0,0,0)"%(id))
+    def getRPGUser(self,id):
+        self.c.execute("SELECT * FROM rpgusers WHERE USERID = %i"%(id))
+        result = self.c.fetchone()
+        if result == None:
+            self.newRPGUser(id)
+            self.c.execute("SELECT * FROM slots WHERE USERID = %i"%(id))
+            result = self.c.fetchone()
+        return result
+
+
 
 if __name__ == "__main__":
     dbHan = handler()
-    user = dbHan.getUser(459034429956947968)
-    print(user.Currency)
+    print(dbHan.getRPGUser(459034429956947968))
 
 
 
