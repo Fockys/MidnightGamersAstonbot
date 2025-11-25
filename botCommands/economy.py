@@ -3,10 +3,11 @@ from discord import app_commands
 from discord.ext import commands
 import time
 import random
+from botMain import botClient
 import math
 
 class economyCog(commands.Cog):
-    def __init__(self,client:commands.Bot):
+    def __init__(self,client:botClient):
         self.client = client
 
 
@@ -16,7 +17,8 @@ class economyCog(commands.Cog):
 
     @app_commands.command(name="cash",description="get the amount of currency you have")
     async def getCurrency(self,interaction):
-        await interaction.response.send_message("you have "+self.client.currencySymbol+str(self.client.dbHan.getCurrency(interaction.user.id)))
+        user = self.client.dbHan.getUser(interaction.user.id)
+        await interaction.response.send_message("you have "+self.client.currencySymbol+str(user.Currency))
 
     @app_commands.command(name="leaderboard",description="Shows the 10 richest users")
     async def leaderBoard(self,interaction:discord.Interaction):
@@ -48,21 +50,21 @@ class economyCog(commands.Cog):
             await interaction.response.send_message("You cant steal from yourself")
             return
 
-        userDB = self.client.dbHan.getUser(interaction.user.id)[0]
-        targetDB = self.client.dbHan.getUser(target.id)[0]
+        userDB = self.client.dbHan.getUser(interaction.user.id)
+        targetDB = self.client.dbHan.getUser(target.id)
         try:
             currentTime = time.time()
-            if userDB[4]==None or currentTime>userDB[4]+900:
+            if userDB.lastSteal==None or currentTime>userDB.lastSteal+900:
                 success = random.random()
                 if success > 0.8:
-                    lost = math.ceil(userDB[1])
+                    lost = math.ceil(userDB.Currency)
                     await interaction.response.send_message("You got caught and lost it all")
                     self.client.dbHan.increaseCurrency(interaction.user.id,-lost)
                 else:
                     if interaction.user.id == 609056469689565235:
-                        stealAmount = math.ceil(targetDB[1]*0.003)
+                        stealAmount = math.ceil(targetDB.Currency*0.003)
                     else:
-                        stealAmount = math.ceil(targetDB[1]*0.001)
+                        stealAmount = math.ceil(targetDB.Currency*0.001)
 
                     await interaction.response.send_message("You succesffuly stole "+self.client.currencySymbol + str(stealAmount) + " from "+target.name)
                     self.client.dbHan.increaseCurrency(interaction.user.id,stealAmount)
@@ -85,9 +87,8 @@ class economyCog(commands.Cog):
                 await interaction.response.send_message("invalid amount")
                 return
             user = self.client.dbHan.getUser(interaction.user.id)
-            user=user[0]
             amount = int(amount)
-            if user[1] < amount:
+            if user.Currency < amount:
                 await interaction.response.send_message("lacking funds")
                 return
             
