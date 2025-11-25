@@ -10,7 +10,6 @@ try:
     TOKEN= os.environ['TOKEN']
     
 except:
-
     print("Environment token not found")
     
    
@@ -57,16 +56,15 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.author.id == 663388334059683848:
-        print("is nite")
         await message.add_reaction("🫃")
     if message.author != client.user:
         #prints chat to command line
         print(message.author.name + ":" +message.content)
         user = client.dbHan.getUser(message.author.id)
-        user=user[0]
+        user=user
 
         #checks if user is eligbile for next coin
-        if user[3] == None or (time.time()>user[3]+60):
+        if user.lastCoin == None or (time.time()>user.lastCoin+60):
             #increases currency by 1 for message author
             client.dbHan.increaseCurrency(message.author.id,1)
             client.dbHan.writeLastCoinNow(message.author.id)
@@ -76,8 +74,10 @@ async def main():
     async with client:
         await client.start(TOKEN)
 
-#start main
-asyncio.run(main())
+
+if __name__ == "__main__":
+    #start main
+    asyncio.run(main())
 
 
 

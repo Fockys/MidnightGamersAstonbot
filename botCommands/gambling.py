@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import random
 import math
+from botMain import botClient
 from botCommands.gamblingHelper.blackjack import blackjackGame
 from botCommands.gamblingHelper.slots import slotsGame
 
@@ -11,7 +12,7 @@ from botCommands.gamblingHelper.slots import slotsGame
 
 #gambling cog
 class gamblingCog(commands.Cog):
-    def __init__(self,client):
+    def __init__(self,client:botClient):
         self.client = client
         self.blackjackGames  = {}
 
@@ -30,7 +31,7 @@ class gamblingCog(commands.Cog):
         amount = int(amount)
 
         user = self.client.dbHan.getUser(interaction.user.id)
-        user=user[0]
+        
          
         chance = random.random()
         if user[1] < amount:
@@ -39,11 +40,11 @@ class gamblingCog(commands.Cog):
         if chance>0.5:
             self.client.dbHan.increaseCurrency(interaction.user.id,amount)
             des = "You won the flip"
-            bal = str(user[1]+amount)
+            bal = str(user.Currency+amount)
         else:
             self.client.dbHan.increaseCurrency(interaction.user.id,-amount)
             des = "You lost the flip"
-            bal = str(user[1]-amount)
+            bal = str(user.Currency-amount)
 
         embed = discord.Embed(
             title="Coin Flip",
@@ -126,8 +127,7 @@ class gamblingCog(commands.Cog):
             await interaction.response.send_message("invalid amount")
             return 0
         user = self.client.dbHan.getUser(interaction.user.id)
-        user=user[0]
-        if user[1] < int(amount):
+        if user.Currency < int(amount):
             await interaction.response.send_message("lacking funds")
             return 0
         self.client.dbHan.increaseCurrency(interaction.user.id,-(int(amount)))
@@ -154,18 +154,17 @@ class gamblingCog(commands.Cog):
         #ensures bet amount is valid
         if amount.isdigit() == False:
             await interaction.response.send_message("invalid amount")
-            return 0
+            return
         if int(amount) > 1000:
             await interaction.response.send_message("Max bet is set at 1000")
-            return 0
+            return
         if int(amount)<5:
             await interaction.response.send_message("Min bet set at 5")
-            return 0
+            return
         user = self.client.dbHan.getUser(interaction.user.id)
-        user=user[0]
-        if user[1] < int(amount):
+        if user.Currency < int(amount):
             await interaction.response.send_message("lacking funds")
-            return 0
+            return
         
         amount = int(amount)
         
