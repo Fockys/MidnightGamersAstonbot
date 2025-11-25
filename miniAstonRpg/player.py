@@ -1,23 +1,32 @@
 import math
+from botMain import botClient
+import os
+import sys
+
 
 class playerClass():
-    def __init__(self,stats,xp,skillPoints,spell,hp):
-        self.discordUser = None
-        self.xp = xp
+    def __init__(self,id,client:botClient):
+        self.client = client
+        self.id = id
         self.levelConst = 1
-        self.skillPoints = skillPoints
+        self.getPlayer()
 
-        self.str = stats[0]
-        self.dex = stats[1]
-        self.con = stats[2]
-        self.int = stats[3]
-        self.wis = stats[4]
-        self.cha = stats[5]
+    def getPlayer(self):
+        get = self.client.dbHan.getRPGUser(self.id)
 
+        self.xp = get[1]
+        self.skillPoints = get[9]
+
+        self.str = get[2]
+        self.dex = get[3]
+        self.con = get[4]
+        self.int = get[5]
+        self.wis = get[6]
+        self.cha = get[7]
+
+        self.spell = get[10]
+        self.hp = get[8]
         
-
-        self.spell = spell
-        self.hp = hp
 
 
     def changeStrength(self,amount):
@@ -39,9 +48,4 @@ class playerClass():
     def getLevel(self):
         return math.floor(self.levelConst*math.sqrt(self.xp))
     
-
-stats = (0,0,0,0,0,0)
-xp = 500
-player = playerClass(stats,xp)
-print(player.getLevel())
 
