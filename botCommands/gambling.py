@@ -27,14 +27,14 @@ class gamblingCog(commands.Cog):
 
         if amount.isdigit() == False:
             await interaction.response.send_message("invalid amount")
-            return 0
+            return
         amount = int(amount)
 
         user = self.client.dbHan.getUser(interaction.user.id)
         
          
         chance = random.random()
-        if user[1] < amount:
+        if user.Currency < amount:
             await interaction.response.send_message("lacking funds")
             return 0
         if chance>0.5:
@@ -95,6 +95,7 @@ class gamblingCog(commands.Cog):
                 betAmount = self.outter.blackjackGames[interaction.user.id].bet
                 if result == 0:
                     gameEmbed.add_field(name="Game Over",value="Tie")
+                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount)
                 elif result == 1:
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
                 elif result  == 2:
