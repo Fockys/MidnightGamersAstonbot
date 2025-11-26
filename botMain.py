@@ -59,8 +59,8 @@ async def on_message(message):
     if message.author != client.user:
         #prints chat to command line
         print(message.author.name + ":" +message.content)
+
         user = client.dbHan.getUser(message.author.id)
-        user=user
 
         #checks if user is eligbile for next coin
         if user.lastCoin == None or (time.time()>user.lastCoin+60):

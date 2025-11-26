@@ -33,10 +33,11 @@ class gamblingCog(commands.Cog):
         user = self.client.dbHan.getUser(interaction.user.id)
         
          
-        chance = random.random()
+        
         if user.Currency < amount:
             await interaction.response.send_message("lacking funds")
             return 0
+        chance = random.random()
         if chance>0.5:
             self.client.dbHan.increaseCurrency(interaction.user.id,amount)
             des = "You won the flip"
@@ -138,12 +139,12 @@ class gamblingCog(commands.Cog):
         if user.Currency < int(amount):
             await interaction.response.send_message("lacking funds")
             return 0
-        self.client.dbHan.increaseCurrency(interaction.user.id,-(int(amount)))
         #checks if the user is in a game or not already, 1 game per user playing
         if interaction.user.id in self.blackjackGames:
             failEmbed = discord.Embed(title="Blackjack error",description="You are already in a game")
             await interaction.response.send_message(embed=failEmbed)
             return
+        self.client.dbHan.increaseCurrency(interaction.user.id,-(int(amount)))
         #creates blackjack game and setsup
         self.blackjackGames[interaction.user.id] = blackjackGame(int(amount))
         gameEmbed = discord.Embed(title="Blackjack")

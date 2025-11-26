@@ -25,7 +25,6 @@ class economyCog(commands.Cog):
         numberEmojis = {1:"1️⃣",2:"2️⃣",3:"3️⃣",4:"4️⃣",5:"5️⃣",6:"6️⃣",7:"7️⃣",8:"8️⃣",9:"9️⃣",10:"🔟"}
         top10 = self.client.dbHan.getTop10()
         des= ""
-        print("test")
         for i in range(len(top10)):
             try:
                 user= await self.client.fetch_user(top10[i][0])
