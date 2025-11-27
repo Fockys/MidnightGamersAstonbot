@@ -2,7 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from botMain import botClient
-
+ownerID = 459034429956947968
 
 class adminCog(commands.Cog):
     def __init__(self,client:botClient):
@@ -13,6 +13,9 @@ class adminCog(commands.Cog):
     @app_commands.describe(target="person to target",amount="amount of money to give")
     @app_commands.default_permissions()
     async def admingive(self,interaction:discord.Interaction,target:discord.Member,amount:str):
+        if interaction.user.id != ownerID:
+            await interaction.response.send_message("not authorized")
+            return
         try:
             #ensures give amount is valid
             if amount.isdigit() == False:
@@ -31,6 +34,9 @@ class adminCog(commands.Cog):
     @app_commands.describe(target="person to target",amount="amount of money to give")
     @app_commands.default_permissions()
     async def admintake(self,interaction:discord.Interaction,target:discord.Member,amount:str):
+        if interaction.user.id != ownerID:
+            await interaction.response.send_message("not authorized")
+            return
         try:
             #ensures give amount is valid
             if amount.isdigit() == False:
