@@ -8,6 +8,7 @@ class adminCog(commands.Cog):
     def __init__(self,client:botClient):
         self.client = client
 
+
     @app_commands.command(name="admingive",description="give money to someone")
     @app_commands.describe(target="person to target",amount="amount of money to give")
     @app_commands.default_permissions()

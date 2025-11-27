@@ -38,15 +38,20 @@ def slotsGame():
 
 
     #get the longest repeating symbol and if the crown symbol is present
-    longest = 0
+    symbolsSelected = sorted(symbolsSelected)
+
+    longest = 1
+    current = 1
     crown = False
-    for i in range(len(symbolsSelected)):
-        j=0
+
+    for i in range(3):
         if symbolsSelected[i] == "crown":
             crown = True
-        while j< len(symbolsSelected) and symbolsSelected[j] == symbolsSelected[i]:
-            j += 1
-            longest = j-i
+        if i > 0 and symbolsSelected[i] == symbolsSelected[i-1]:
+            current += 1
+            longest = max(longest, current)
+        else:
+            current = 1
 
     
 
