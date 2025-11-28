@@ -9,7 +9,7 @@ def slotsGame():
         int prizeMultiplier : the amount to multiply the bet amount by in any case (this also corresponds to the different types of wins)
         str symbolsOutput : the selected 3 symbols returned to a user
     """
-    symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown","strawberry","blueberry"]
+    symbols = ["melon","pear","peach","orange","lemon","cherries","grapes","crown","strawberry","blueberry","apple","banana","watermelon","pineapple","kiwi"]
     symbolEmoji = {
         "melon":"🍈",
         "pear":"🍐",
@@ -41,12 +41,13 @@ def slotsGame():
     longest = 0
     crown = False
     for i in range(len(symbolsSelected)):
-        j=0
+        j=i
         if symbolsSelected[i] == "crown":
             crown = True
         while j< len(symbolsSelected) and symbolsSelected[j] == symbolsSelected[i]:
             j += 1
-            longest = (j+1)-i
+            longest = max(longest,j-i)
+
 
     
 
@@ -80,3 +81,13 @@ def slotsGame():
 
 
     
+if __name__ == "__main__":
+    total = 0
+    for i in range(100000):
+        result = slotsGame()
+        if result[0] == 100:
+            print(result[1])
+            print("jackpot")
+        total += result[0]
+
+    print(total)

@@ -144,6 +144,7 @@ class gamblingCog(commands.Cog):
             failEmbed = discord.Embed(title="Blackjack error",description="You are already in a game")
             await interaction.response.send_message(embed=failEmbed)
             return
+        #takes user money
         self.client.dbHan.increaseCurrency(interaction.user.id,-(int(amount)))
         #creates blackjack game and setsup
         self.blackjackGames[interaction.user.id] = blackjackGame(int(amount))
