@@ -6,9 +6,8 @@ class userRecord():
     def __init__(self,userReturn):
         self.userId = userReturn[0]
         self.Currency = userReturn[1]
-        self.xp = userReturn[2]
-        self.lastCoin = userReturn[3]
-        self.lastSteal = userReturn[4]
+        self.lastCoin = userReturn[2]
+        self.lastSteal = userReturn[3]
 
 #handles the db with serveral functions to interact with it
 class handler():
@@ -29,19 +28,11 @@ class handler():
 
     def createTable(self):
         self.c.execute("""
-                CREATE TABLE rpgUsers (
+                CREATE TABLE users (
                     USERID BIGINT PRIMARY KEY NOT NULL,
-                    XP INTEGER NOT NULL,
-                    STR INTEGER NOT NULL,
-                    DEX INTEGER NOT NULL,
-                    CON INTEGER NOT NULL,
-                    INT INTEGER NOT NULL,
-                    WIS INTEGER NOT NULL,
-                    CHA INTEGER NOT NULL,
-                    HP INTEGER NOT NULL,
-                    SKILLPOINTS INTEGER NOT NULL,
-                    SPELL INTEGER,
-                    LASTHEAL BIGINT NOT NULL
+                    CURRENCY INTEGER NOT NULL,
+                    LASTCOIN INTEGER,
+                    LASTSTEAL INTEGER
 
                   )
                   """)
@@ -56,7 +47,7 @@ class handler():
 
     def newUser(self,id):
         self.c.execute("""
-                INSERT INTO users (USERID,CURRENCY,XP) VALUES (%i,0,0)"""%(id))
+                INSERT INTO users (USERID,CURRENCY) VALUES (%i,0)"""%(id))
         
     def getUser(self,id):
         self.c.execute("SELECT * FROM users WHERE USERID=%i"%(id))
@@ -134,7 +125,7 @@ class handler():
 
 if __name__ == "__main__":
     dbHan = handler()
-    print(dbHan.getRPGUser(459034429956947968))
+    dbHan.createTable()
 
 
 

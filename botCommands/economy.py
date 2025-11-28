@@ -17,8 +17,12 @@ class economyCog(commands.Cog):
 
     @app_commands.command(name="cash",description="get the amount of currency you have")
     async def getCurrency(self,interaction):
-        user = self.client.dbHan.getUser(interaction.user.id)
-        await interaction.response.send_message("you have "+self.client.currencySymbol+str(user.Currency))
+        try:
+            user = self.client.dbHan.getUser(interaction.user.id)
+            await interaction.response.send_message("you have "+self.client.currencySymbol+str(user.Currency))
+        except Exception as e:
+            print("/cash failure")
+            print(e)
 
     @app_commands.command(name="leaderboard",description="Shows the 10 richest users")
     async def leaderBoard(self,interaction:discord.Interaction):
