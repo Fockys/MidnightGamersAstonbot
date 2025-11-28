@@ -46,7 +46,7 @@ def slotsGame():
             crown = True
         while j< len(symbolsSelected) and symbolsSelected[j] == symbolsSelected[i]:
             j += 1
-            longest = j-i
+            longest = (j+1)-i
 
     
 

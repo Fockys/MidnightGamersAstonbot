@@ -23,6 +23,7 @@ class botClient(commands.Bot):
         self.dbHan = db.handler()
         #the symbol to be used with currency
         self.currencySymbol = "🪙"
+        
 
         super().__init__(
             command_prefix="!",
@@ -37,13 +38,14 @@ class botClient(commands.Bot):
         await client.load_extension(f"miniAstonRpg.rpgCommands")
         await sync()
 
+
+
 client = botClient()
 
 #sync slash commands with discord
 async def sync():
     print("Starting sync")
     try:
-        guild = discord.Object(id=1383922325065564210)
         synced = await client.tree.sync()
         print(f"Synced {len(synced)} command(s).")
     except:
@@ -53,12 +55,25 @@ async def sync():
 @client.event
 async def on_ready():
     print("logged in as:",client.user.name)
+    
+    try:
+        server = client.guilds[0]
+        print("currently in : " + server.name)
+        for channel in server.channels:
+            if channel.name == "logs":
+                client.logChannel = channel
+                
+    except Exception as e:
+        print(e)
+    
+
  
 @client.event
-async def on_message(message):
+async def on_message(message:discord.Message):
     if message.author != client.user:
-        #prints chat to command line
-        print(message.author.name + ":" +message.content)
+        #logging
+
+        await client.logChannel.send(message.author.name+ " in " + message.channel.name + " : "+ message.content)
 
         user = client.dbHan.getUser(message.author.id)
 

@@ -76,7 +76,8 @@ class economyCog(commands.Cog):
 
     @app_commands.command(name="give",description="give money to someone")
     @app_commands.describe(target="person to target",amount="amount of money to give")
-    async def give(self,interaction:discord.Interaction,target:discord.Member,amount:str):
+    async def give(self,interaction:discord.Interaction,target:discord.Member,amount:app_commands.Range[int,1,100000]):
+        amount = str(amount)
         if interaction.user.id == target.id:
             await interaction.response.send_message("You cant give to yourself")
             return
