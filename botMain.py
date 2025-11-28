@@ -25,6 +25,7 @@ class botClient(commands.Bot):
         self.dbHan = db.handler()
         #the symbol to be used with currency
         self.currencySymbol = "🪙"
+        self.bannedWords = []
         
 
         super().__init__(
@@ -76,6 +77,12 @@ async def on_message(message:discord.Message):
         #logging
         nowTime = str(datetime.datetime.now().strftime("%H:%M:%S"))
         await client.logChannel.send(nowTime+" | "+message.author.name+ " in " + message.channel.name + " : "+ message.content)
+
+        #delete messages with banned words and send alert to log channel maybe
+        for word in client.bannedWords:
+            if word in message.content:
+                await message.delete()
+                await client.logChannel.send("----Banned Word----")
 
         user = client.dbHan.getUser(message.author.id)
 
