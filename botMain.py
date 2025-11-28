@@ -3,6 +3,7 @@ from discord.ext import commands
 import database.dbHandler as db
 import asyncio
 import os
+import datetime
 import time
 
 #bot token
@@ -72,8 +73,8 @@ async def on_ready():
 async def on_message(message:discord.Message):
     if message.author != client.user:
         #logging
-
-        await client.logChannel.send(message.author.name+ " in " + message.channel.name + " : "+ message.content)
+        nowTime = str(datetime.datetime.now().strftime("%H:%M:%S"))
+        await client.logChannel.send(nowTime+" | "+message.author.name+ " in " + message.channel.name + " : "+ message.content)
 
         user = client.dbHan.getUser(message.author.id)
 
