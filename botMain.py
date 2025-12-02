@@ -12,6 +12,7 @@ try:
     
 except:
 
+
     print("Environment token not found")
     
    
@@ -75,14 +76,18 @@ async def on_message(message:discord.Message):
     if message.author != client.user:
         #logging
         nowTime = str(datetime.datetime.now().strftime("%H:%M:%S"))
-        await client.logChannel.send(nowTime+" | "+message.author.name+ " in " + message.channel.name + " : "+ message.content)
+        await client.logChannel.send(nowTime+" | "+message.author.name+ " in " + message.channel.name + " : "+ message.content.replace("<","").replace(">",""))
 
         user = client.dbHan.getUser(message.author.id)
 
         #checks if user is eligbile for next coin
         if user.lastCoin == None or (time.time()>user.lastCoin+60):
-            #increases currency by 1 for message author
-            client.dbHan.increaseCurrency(message.author.id,1)
+            #increases currency by 1 or 2 for message author depending on if they are a member
+            if "1445207809649021030" in [y.id for y in message.author.roles]:
+                client.dbHan.increaseCurrency(message.author.id,2)
+            
+            else:
+                client.dbHan.increaseCurrency(message.author.id,1)
             client.dbHan.writeLastCoinNow(message.author.id)
 
 #start bot

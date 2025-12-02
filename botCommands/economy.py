@@ -45,7 +45,7 @@ class economyCog(commands.Cog):
 
     @app_commands.command(name="steal",description="steal from someone, chance to get caught")
     @app_commands.describe(target="person to target")
-    async def fine(self,interaction:discord.Interaction,target:discord.Member):
+    async def steal(self,interaction:discord.Interaction,target:discord.Member):
 
         
 
@@ -64,10 +64,9 @@ class economyCog(commands.Cog):
                     await interaction.response.send_message("You got caught and lost it all")
                     self.client.dbHan.increaseCurrency(interaction.user.id,-lost)
                 else:
-                    if interaction.user.id == 609056469689565235:
-                        stealAmount = math.ceil(targetDB.Currency*0.003)
-                    else:
-                        stealAmount = math.ceil(targetDB.Currency*0.001)
+                    
+                    stealAmount = math.ceil(targetDB.Currency*0.01)
+                    
 
                     await interaction.response.send_message("You succesffuly stole "+self.client.currencySymbol + str(stealAmount) + " from "+target.name)
                     self.client.dbHan.increaseCurrency(interaction.user.id,stealAmount)
