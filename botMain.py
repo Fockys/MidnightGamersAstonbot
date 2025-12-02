@@ -83,7 +83,7 @@ async def on_message(message:discord.Message):
         #checks if user is eligbile for next coin
         if user.lastCoin == None or (time.time()>user.lastCoin+60):
             #increases currency by 1 or 2 for message author depending on if they are a member
-            if "1445207809649021030" in [y.id for y in message.author.roles]:
+            if 1445207809649021030 in [y.id for y in message.author.roles]:
                 client.dbHan.increaseCurrency(message.author.id,2)
             
             else:
