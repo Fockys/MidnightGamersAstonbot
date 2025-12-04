@@ -101,6 +101,7 @@ class handler():
     def setJackpot(self,jackpot):
         try:
             self.c.execute("UPDATE slots SET JACKPOT=%i WHERE USERID = 0"%(jackpot))
+            self.commit()
         except:
             print("failed to set jackpot")
 
