@@ -62,10 +62,10 @@ class blackjackGame():
             sum += self.values[card.value]
             if card.value == "Ace":
                 aces += 1
-                sum+= 10
-        if sum > 21 and aces>0:
-            sum-=10 *aces
 
+        while aces > 0 and sum + 10 <= 21:
+            sum += 10
+            aces -= 1
         
         return(sum)
     
@@ -143,16 +143,20 @@ class blackjackGame():
                 self.hitBot()
 
 
-    #return 0 for tie, 1 for loss, 2 for win
+    #return 0 for tie, 1 for loss, 2 for win, 3 for win with bonus
     def result(self):
+
+        if self.userTotal == 21:
+            return 3
+        
         if self.userTotal>21:
             return 1
         elif self.botTotal>21:
             return 2
-        elif self.userTotal>self.botTotal:
-            return 2
         elif self.botTotal>self.userTotal:
             return 1
+        elif self.userTotal>=self.botTotal:
+            return 2
         else:
             return 0
 

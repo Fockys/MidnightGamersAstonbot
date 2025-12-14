@@ -94,16 +94,22 @@ class gamblingCog(commands.Cog):
                 gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                 gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
                 betAmount = self.outter.blackjackGames[interaction.user.id].bet
+                #0 is a tie, 1 is a loss, 2 is win, 3 is win with bonus
                 if result == 0:
                     gameEmbed.add_field(name="Game Over",value="Tie")
                     self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount)
                 elif result == 1:
                     gameEmbed.add_field(name="Game Over",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
-                elif result  == 2:
-                    
-                    gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount))
-                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2)
+                elif result >= 2:
+                    bonusMsg = ""
+                    bonus = 0
+                    if result==3:
+                        bonus = math.ceil(betAmount*0.5)
+                        bonusMsg = " + bonus " + self.outter.client.currencySymbol+str(bonus)
+                    gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount)+bonusMsg)
+                    self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2+bonus)
                 self.outter.blackJackEnd(interaction.user.id)
+            
                 try:
                     gameEmbed.set_field_at(0,name="Dealer Hand",value=self.outter.blackjackGames[interaction.user.id].niceBotDeck(True),inline=False)
                 except Exception as e:

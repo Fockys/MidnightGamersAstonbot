@@ -28,6 +28,9 @@ class generalCog(commands.Cog):
         except Exception as e:
             print(e)
 
+    @app_commands.command(name="credits",description="credits to people who helped with ths bot")
+    async def credits(self,interaction:discord.Interaction):
+        await interaction.response.send_message(content="Thanks to @inf1nitea for blackjack aces fix")
 
 
 async def setup(client):
