@@ -60,10 +60,23 @@ class gamblingCog(commands.Cog):
 
     #handles the buttons for the blackjack game
     class blackjackButtons(discord.ui.View):
-        def __init__(self,outter,timeout=30):
+        def __init__(self,outter,interaction:discord.Interaction,timeout=60):
             super().__init__(timeout=timeout)
             self.outter = outter
+            self.interaction = interaction
 
+
+        async def on_timeout(self):
+            gameEmbed = discord.Embed(title="Blackjack")
+            gameEmbed.add_field(name="Dealer Hand",value=self.outter.blackjackGames[self.interaction.user.id].niceBotDeck(False),inline=False)
+            gameEmbed.add_field(name=self.interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[self.interaction.user.id].niceUserDeck(),inline=False)
+            betAmount = self.outter.blackjackGames[self.interaction.user.id].bet
+            gameEmbed.add_field(name="Game Timed out ",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
+            self.outter.blackJackEnd(self.interaction.user.id)
+            await self.interaction.edit_original_response(embed=gameEmbed,view=None)
+            return await super().on_timeout()
+        
+        
         #creates the button for hit and its behaviour
         @discord.ui.button(label="Hit",style=discord.ButtonStyle.gray)
         async def hitPressed(self,interaction:discord.Interaction,button:discord.Button):
@@ -84,6 +97,7 @@ class gamblingCog(commands.Cog):
             except Exception as e:
                 print(e)
 
+        
 
         #creates the button for stand and its behaviour
         @discord.ui.button(label="Stand",style=discord.ButtonStyle.gray)
@@ -160,7 +174,7 @@ class gamblingCog(commands.Cog):
         gameEmbed.add_field(name=interaction.user.display_name+"'s hand",value=self.blackjackGames[interaction.user.id].niceUserDeck(),inline=False)
 
 
-        await interaction.response.send_message(embed=gameEmbed,view = self.blackjackButtons(self))
+        await interaction.response.send_message(embed=gameEmbed,view = self.blackjackButtons(self,interaction))
 
 
     #slots fruits
