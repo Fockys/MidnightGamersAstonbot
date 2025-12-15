@@ -67,11 +67,9 @@ class gamblingCog(commands.Cog):
 
 
         async def on_timeout(self):
-            gameEmbed = discord.Embed(title="Blackjack")
-            gameEmbed.add_field(name="Game Timed out ",value="You lost ")
             
-            await self.interaction.edit_original_response(embed=gameEmbed,view=None)
-            self.outter.blackJackEnd(self.interaction.user.id)
+            if self.interaction in self.outter.blackjackGames:
+                self.outter.blackJackEnd(self.interaction.user.id)
             return await super().on_timeout()
         
         
