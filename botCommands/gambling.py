@@ -72,8 +72,9 @@ class gamblingCog(commands.Cog):
             gameEmbed.add_field(name=self.interaction.user.display_name+"'s hand",value=self.outter.blackjackGames[self.interaction.user.id].niceUserDeck(),inline=False)
             betAmount = self.outter.blackjackGames[self.interaction.user.id].bet
             gameEmbed.add_field(name="Game Timed out ",value="You lost "+self.outter.client.currencySymbol+str(betAmount))
-            self.outter.blackJackEnd(self.interaction.user.id)
+            
             await self.interaction.edit_original_response(embed=gameEmbed,view=None)
+            self.outter.blackJackEnd(self.interaction.user.id)
             return await super().on_timeout()
         
         
