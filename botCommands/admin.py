@@ -104,7 +104,7 @@ class adminCog(commands.Cog):
         try:
             targetDiscID = self.client.dbHan.getStudentFromAstonID(target)[0]
             print(targetDiscID)
-            target = await interaction.guild.get_member(targetDiscID)
+            target = interaction.guild.get_member(targetDiscID)
             await target.add_roles(role)
         except Exception as e:
             print("could not add role")
