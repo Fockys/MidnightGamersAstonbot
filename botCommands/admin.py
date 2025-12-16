@@ -104,7 +104,7 @@ class adminCog(commands.Cog):
         try:
             targetDiscID = self.client.dbHan.getStudentFromAstonID(target)[0]
             print(targetDiscID)
-            target = botClient.fetch_user(targetDiscID)
+            target = await botClient.fetch_user(targetDiscID)
             await target.add_roles(role)
         except Exception as e:
             print("could not add role")
