@@ -102,7 +102,8 @@ class adminCog(commands.Cog):
         
         role = interaction.guild.get_role(MemberRole)
         try:
-            targetDiscID = self.client.dbHan.getStudentFromAstonID(target)[1]
+            targetDiscID = self.client.dbHan.getStudentFromAstonID(target)[0]
+            print(targetDiscID)
             target = botClient.fetch_user(targetDiscID)
             await target.add_roles(role)
         except Exception as e:
