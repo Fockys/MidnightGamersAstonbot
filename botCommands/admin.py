@@ -72,7 +72,7 @@ class adminCog(commands.Cog):
         if target == -1:
             await interaction.response.send_message("Target is not a student or not in DB")
             return
-        await interaction.response.send_message("<@"+str(target[0])+"> | astonID = "+str(target[1])+" | isMember = "+str(target[3]),ephemeral=True)
+        await interaction.response.send_message("<@"+str(target[0])+"> | astonID = "+str(target[1])+" | isMember = "+str(target[2]),ephemeral=True)
 
         
     @app_commands.command(name="setcommittee",description="sets target as committee member")
