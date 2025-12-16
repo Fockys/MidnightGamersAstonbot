@@ -65,7 +65,7 @@ class adminCog(commands.Cog):
     @app_commands.default_permissions(kick_members=True)
     async def getAstonID(self,interaction:discord.Interaction, target:discord.Member):
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
-        if user[2] == False:
+        if user[3] == False:
             await interaction.response.send_message("invalid permissions",ephemeral=True)
             return
         target = self.client.dbHan.getStudentFromDisc(target.id)
@@ -96,7 +96,7 @@ class adminCog(commands.Cog):
     async def setMember(self,interaction:discord.Interaction,target:int):
         
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
-        if user[2] == False:
+        if user[3] == False:
             await interaction.response.send_message("invalid permissions",ephemeral=True)
             return
         
@@ -125,7 +125,7 @@ class adminCog(commands.Cog):
     async def addStudent(self,interaction:discord.Interaction,target:discord.Member,astonid:int):
 
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
-        if user[2] == False:
+        if user[3] == False:
             await interaction.response.send_message("invalid permissions",ephemeral=True)
             return
         
@@ -147,7 +147,7 @@ class adminCog(commands.Cog):
     @app_commands.default_permissions(kick_members=True)
     async def addExternal(self,interaction:discord.Interaction,target:discord.Member):
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
-        if user[2] == False:
+        if user[3] == False:
             await interaction.response.send_message("invalid permissions",ephemeral=True)
             return
         
