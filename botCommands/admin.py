@@ -92,7 +92,7 @@ class adminCog(commands.Cog):
 
     @app_commands.command(name="setmember",description="sets target as committee member")
     @app_commands.describe(target="Aston ID of person to set")
-    @app_commands.default_permissions()
+    @app_commands.default_permissions(kick_members=True)
     async def setMember(self,interaction:discord.Interaction,target:int):
         
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
@@ -121,7 +121,7 @@ class adminCog(commands.Cog):
 
     @app_commands.command(name="as",description="Add student to DB and give roles automatically")
     @app_commands.describe(target="The person to add",astonid="the persons aston ID")
-    @app_commands.default_permissions()
+    @app_commands.default_permissions(kick_members=True)
     async def addStudent(self,interaction:discord.Interaction,target:discord.Member,astonid:int):
 
         user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
