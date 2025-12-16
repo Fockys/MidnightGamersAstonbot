@@ -119,7 +119,7 @@ class adminCog(commands.Cog):
 
 
 
-    @app_commands.command(name="addstudent",description="Add student to DB and give roles automatically")
+    @app_commands.command(name="as",description="Add student to DB and give roles automatically")
     @app_commands.describe(target="The person to add",astonid="the persons aston ID")
     @app_commands.default_permissions()
     async def addStudent(self,interaction:discord.Interaction,target:discord.Member,astonid:int):
@@ -142,7 +142,7 @@ class adminCog(commands.Cog):
         await interaction.response.send_message("<@"+str(target.id)+"> with astonID "+str(astonid)+" set as student",ephemeral=True)
 
 
-    @app_commands.command(name="addexternal",description="Add external roles")
+    @app_commands.command(name="ae",description="Add external roles")
     @app_commands.describe(target="person to set as external")
     @app_commands.default_permissions(kick_members=True)
     async def addExternal(self,interaction:discord.Interaction,target:discord.Member):
