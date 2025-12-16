@@ -139,7 +139,7 @@ class adminCog(commands.Cog):
         except Exception as e:
             print("could not add role")
             print(e)
-        await interaction.response.send_message("<@"+str(target.id)+"> with astonID "+str(astonid)+" set as student")
+        await interaction.response.send_message("<@"+str(target.id)+"> with astonID "+str(astonid)+" set as student",ephemeral=True)
 
 
     @app_commands.command(name="addexternal",description="Add external roles")
@@ -156,7 +156,7 @@ class adminCog(commands.Cog):
             await target.add_roles(role)
         except:
             print("could not set role")
-        await interaction.response.send_message("<@"+str(target.id)+"> set as external")
+        await interaction.response.send_message("<@"+str(target.id)+"> set as external",ephemeral=True)
 
   
 
