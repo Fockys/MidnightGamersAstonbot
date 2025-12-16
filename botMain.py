@@ -9,7 +9,6 @@ import time
 #bot token
 try:
     TOKEN= os.environ['TOKEN']
-    
 except:
     print("Environment token not found")
     
@@ -35,7 +34,10 @@ class botClient(commands.Bot):
     async def setup_hook(self):
         for filename in os.listdir("./botCommands"):
             if filename.endswith("py"):
-                await client.load_extension(f"botCommands.{filename[:-3]}")
+                try:
+                    await client.load_extension(f"botCommands.{filename[:-3]}")
+                except Exception as e:
+                    print(e)
         await client.load_extension(f"miniAstonRpg.rpgCommands")
         await sync()
 

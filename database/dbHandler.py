@@ -29,11 +29,11 @@ class handler():
 
     def createTable(self):
         self.c.execute("""
-                CREATE TABLE users (
+                CREATE TABLE members (
                     USERID BIGINT PRIMARY KEY NOT NULL,
-                    CURRENCY INTEGER NOT NULL,
-                    LASTCOIN INTEGER,
-                    LASTSTEAL INTEGER
+                    ASTONID INTEGER NOT NULL,
+                    isMember BOOL,
+                    isCommittee BOOL
 
                   )
                   """)
@@ -122,12 +122,47 @@ class handler():
             self.c.execute("SELECT * FROM slots WHERE USERID = %i"%(id))
             result = self.c.fetchone()
         return result
+    
+    #stuff for storing mappings of discord ids to aston ids
+    def addStudent(self,discordID:int,astonID:int):
+        self.c.execute("SELECT*FROM members WHERE userid = %i"%(discordID))
+        result = self.c.fetchone()
+        if result != None:
+            return -1
+        self.c.execute("INSERT INTO members (userid,astonid,iscommittee,ismember) VALUES (%i,%i,FALSE,FALSE)"%(discordID,astonID))
+        self.commit()
+        return 1
 
+    #get a students id from there discord
+    def getStudentFromDisc(self,discordID:int):
+        self.c.execute("SELECT*FROM members WHERE userid = %i"%(discordID))
+        result = self.c.fetchone()
+        if result == None:
+            return -1
+        else:
+            return result
+        
+    def getStudentFromAstonID(self,astonID:int):
+        self.c.execute("SELECT*FROM members WHERE astonid = %i"%(astonID))
+        result = self.c.fetchone()
+        if result == None:
+            return -1
+        else:
+            return result
+        
 
+    def setMember(self,astonID:int):
+        self.c.execute("UPDATE members SET ismember = TRUE WHERE astonid=%i"%(astonID))
+        self.commit()
+
+    def setCommittee(self,astonID:int):
+        self.c.execute("UPDATE members SET iscommittee = TRUE WHERE astonid=%i"%(astonID))
 
 if __name__ == "__main__":
     dbHan = handler()
-    dbHan.createTable()
+    s = dbHan.getStudentFromDisc(459034429956947968)
+    print(s)
+
 
 
 
