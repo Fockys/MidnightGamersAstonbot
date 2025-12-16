@@ -131,7 +131,7 @@ class adminCog(commands.Cog):
         
         t = self.client.dbHan.addStudent(target.id,astonid)
         if t == -1:
-            await interaction.response.send_message("Target is already a student")
+            await interaction.response.send_message("Target is already a student",ephemeral=True)
             return
         role = interaction.guild.get_role(studentRole)
         try:
