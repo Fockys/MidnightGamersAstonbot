@@ -134,8 +134,9 @@ class adminCog(commands.Cog):
         role = interaction.guild.get_role(studentRole)
         try:
             await target.add_roles(role)
-        except:
+        except Exception as e:
             print("could not add role")
+            print(e)
         await interaction.response.send_message("<@"+str(target.id)+"> with astonID "+str(astonid)+" set as student")
 
 
