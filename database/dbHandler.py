@@ -45,7 +45,7 @@ class handler():
         return result
 
     def getTop10Activity(self):
-        self.c.execute("SELECT * FROM users ORDER BY activity DESC LIMIT 10")
+        self.c.execute("SELECT * FROM users WHERE activity IS NOT NULL ORDER BY activity DESC LIMIT 10")
         result = self.c.fetchall()
         return result 
 
