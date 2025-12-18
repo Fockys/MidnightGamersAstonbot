@@ -8,6 +8,7 @@ class userRecord():
         self.Currency = userReturn[1]
         self.lastCoin = userReturn[2]
         self.lastSteal = userReturn[3]
+        self.activity = userReturn[4]
 
 #handles the db with serveral functions to interact with it
 class handler():
@@ -71,6 +72,18 @@ class handler():
     def increaseCurrency(self,id,increase):
         user = self.getUser(id)
         self.c.execute("UPDATE users SET CURRENCY=%i WHERE USERID = %i"%(user.Currency+increase,id))
+        self.commit()
+
+
+    def incrementActivity(self,id):
+        user = self.getUser(id)
+        if user.activity == None:
+            new = 1
+        else:
+            new = user.activity+1
+
+        print(id,new)
+        self.c.execute("UPDATE users SET ACTIVITY=%i WHERE USERID = %i"%(new,id))
         self.commit()
 
     def writeLastCoinNow(self,id):
@@ -158,10 +171,12 @@ class handler():
     def setCommittee(self,astonID:int):
         self.c.execute("UPDATE members SET iscommittee = TRUE WHERE astonid=%i"%(astonID))
 
+    
+
 if __name__ == "__main__":
     dbHan = handler()
-    s = dbHan.getStudentFromDisc(459034429956947968)
-    print(s)
+
+
 
 
 

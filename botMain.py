@@ -88,6 +88,7 @@ async def on_message(message:discord.Message):
             
             else:
                 client.dbHan.increaseCurrency(message.author.id,1)
+            client.dbHan.incrementActivity(message.author.id)
             client.dbHan.writeLastCoinNow(message.author.id)
 
 #start bot
