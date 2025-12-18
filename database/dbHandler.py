@@ -44,6 +44,11 @@ class handler():
         result = self.c.fetchall()
         return result
 
+    def getTop10Activity(self):
+        self.c.execute("SELECT * FROM users ORDER BY activity DESC LIMIT 10")
+        result = self.c.fetchall()
+        return result 
+
     def close(self):
         self.con.close()
 

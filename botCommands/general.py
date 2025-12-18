@@ -28,6 +28,25 @@ class generalCog(commands.Cog):
         except Exception as e:
             print(e)
 
+
+    @app_commands.command(name="topactivity",description="Shows the 10 most active users")
+    async def leaderBoardActibity(self,interaction:discord.Interaction):
+        numberEmojis = {1:"1️⃣",2:"2️⃣",3:"3️⃣",4:"4️⃣",5:"5️⃣",6:"6️⃣",7:"7️⃣",8:"8️⃣",9:"9️⃣",10:"🔟"}
+        top10 = self.client.dbHan.getTop10Activity()
+        des= ""
+        for i in range(len(top10)):
+            try:
+                user= await self.client.fetch_user(top10[i][0])
+                des = des + numberEmojis[i+1]+" | "+str(user.name)+" | "+self.client.currencySymbol+str(top10[i][1])+"\n"
+            except Exception as e:
+                print(top10[i])
+                print(e)
+        embed = discord.Embed(
+            title="Top active users",
+            description= des
+        )
+        await interaction.response.send_message(embed=embed)
+
     @app_commands.command(name="credits",description="credits to people who helped with ths bot")
     async def credits(self,interaction:discord.Interaction):
         await interaction.response.send_message(content="Thanks to @inf1nitea for blackjack aces fix")
