@@ -70,10 +70,24 @@ class adminCog(commands.Cog):
             return
         target = self.client.dbHan.getStudentFromDisc(target.id)
         if target == -1:
-            await interaction.response.send_message("Target is not a student or not in DB")
+            await interaction.response.send_message("Target is not a student or not in DB", ephemeral=True)
             return
         await interaction.response.send_message("<@"+str(target[0])+"> | astonID = "+str(target[1])+" | isMember = "+str(target[2]),ephemeral=True)
 
+
+    @app_commands.command(name="getdiscord",description="Get discord user from aston id")
+    @app_commands.describe(target="Aston ID of the user to get")
+    @app_commands.default_permissions(kick_members=True)
+    async def getDiscordID(self,interaction:discord.Interaction,target:int):
+        user = self.client.dbHan.getStudentFromDisc(interaction.user.id)
+        if user[3] == False:
+            await interaction.response.send_message("invalid permissions",ephemeral=True)
+            return
+        target = self.client.dbHan.getStudentFromAstonID(target)
+        if target == -1:
+            await interaction.response.send_message("Target is not a student or not in DB",ephemeral=True)
+            return
+        await interaction.response.send_message("<@"+str(target[0])+"> | astonID = "+str(target[1])+" | isMember = "+str(target[2]),ephemeral=True)
         
     @app_commands.command(name="setcommittee",description="sets target as committee member")
     @app_commands.describe(target="Aston ID of person to set")
@@ -90,7 +104,7 @@ class adminCog(commands.Cog):
             print(e)
 
 
-    @app_commands.command(name="setmember",description="sets target as committee member")
+    @app_commands.command(name="setmember",description="sets target as society member")
     @app_commands.describe(target="Aston ID of person to set")
     @app_commands.default_permissions(kick_members=True)
     async def setMember(self,interaction:discord.Interaction,target:int):
@@ -158,7 +172,17 @@ class adminCog(commands.Cog):
             print("could not set role")
         await interaction.response.send_message("<@"+str(target.id)+"> set as external",ephemeral=True)
 
-  
+    @app_commands.command(name="ahelp",description="Help for admin commands")
+    @app_commands.default_permissions(kick_members=True)
+    async def adminHelp(self,interaction:discord.Interaction):
+        embed = discord.Embed(title="admin command help")
+        embed.add_field(name="/getastonid <target discord ping>",value="Gets the aston id and member status of someone from a discord ping",inline=False)
+        embed.add_field(name="/getdiscord <target astonID>",value="Gets discord account and member status of someone from their aston student ID",inline=False)
+        embed.add_field(name="/setmember <target astonID>",value="adds the member role to someone and there member status to our database",inline=False)
+        embed.add_field(name="/as <target discord ping> <target astonID>",value="adds someone to our database as a student and gives relevent roles",inline=False)
+        embed.add_field(name="/ae <target discord ping>",value="gives someone external roles",inline=False)
+
+        await interaction.response.send_message(embed=embed)
 
 
 
