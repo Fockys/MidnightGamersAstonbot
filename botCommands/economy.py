@@ -32,7 +32,7 @@ class economyCog(commands.Cog):
         for i in range(len(top10)):
             try:
                 user= await self.client.fetch_user(top10[i][0])
-                des = des + numberEmojis[i+1]+" | "+str(user.name)+" | "+self.client.currencySymbol+str(top10[i][1])+"\n"
+                des = des + numberEmojis[i+1]+" | <@"+str(user.id)+"> | "+self.client.currencySymbol+str(top10[i][1])+"\n"
             except Exception as e:
                 print(top10[i])
                 print(e)
