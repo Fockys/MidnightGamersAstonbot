@@ -106,15 +106,15 @@ class economyCog(commands.Cog):
             print(e)
 
 
-    @app_commands.command(name="buytimeout",description="time out someone for 1 minute, cost is 200 coins")
+    @app_commands.command(name="buytimeout",description="time out someone for 1 minute, cost is 1000 coins")
     @app_commands.describe(target="person to target")
     async def buyTimeOut(self,interaction:discord.Interaction,target:discord.User):
         if interaction.guild.get_role(MemberRole) not in interaction.user.roles:
             await interaction.response.send_message("Only members can use this command")
             return
         user = self.client.dbHan.getUser(interaction.user.id)
-        if user.Currency < 200:
-            await interaction.response.send_message("lacking funds, this costs 200 coins")
+        if user.Currency < 1000:
+            await interaction.response.send_message("lacking funds, this costs 1000 coins")
             return
         
         self.client.dbHan.increaseCurrency(interaction.user.id,-200)
