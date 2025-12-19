@@ -118,7 +118,7 @@ class economyCog(commands.Cog):
             return
         
         self.client.dbHan.increaseCurrency(interaction.user.id,-200)
-        interaction.guild.get_member(target.id).timeout(datetime.timedelta(seconds=60))
+        await interaction.guild.get_member(target.id).timeout(datetime.timedelta(seconds=60))
         await interaction.response.send_message(target.mention+" timed out for 1 min")
 
 
