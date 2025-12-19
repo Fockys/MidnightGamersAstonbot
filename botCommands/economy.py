@@ -105,7 +105,8 @@ class economyCog(commands.Cog):
         except Exception as e:
             print(e)
 
-
+"""
+This command was such a bad idea
     @app_commands.command(name="buytimeout",description="time out someone for 1 minute, cost is 1000 coins")
     @app_commands.describe(target="person to target")
     async def buyTimeOut(self,interaction:discord.Interaction,target:discord.User):
@@ -120,7 +121,7 @@ class economyCog(commands.Cog):
         self.client.dbHan.increaseCurrency(interaction.user.id,-200)
         await interaction.guild.get_member(target.id).timeout(datetime.timedelta(seconds=60))
         await interaction.response.send_message(target.mention+" timed out for 1 min")
-
+"""
 
 async def setup(client):
     await client.add_cog(economyCog(client))
