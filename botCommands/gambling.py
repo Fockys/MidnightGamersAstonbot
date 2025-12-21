@@ -114,7 +114,7 @@ class gamblingCog(commands.Cog):
                     bonusMsg = ""
                     bonus = 0
                     if result==3:
-                        bonus = math.ceil(betAmount*0.5)
+                        bonus = math.ceil(betAmount*0.2)
                         bonusMsg = " + bonus " + self.outter.client.currencySymbol+str(bonus)
                     gameEmbed.add_field(name="Game Over",value="You won "+self.outter.client.currencySymbol+str(betAmount)+bonusMsg)
                     self.outter.client.dbHan.increaseCurrency(interaction.user.id,betAmount*2+bonus)
